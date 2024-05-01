@@ -5,7 +5,7 @@ a description of the purpose of the application, explaining the its design and u
 | UWA Student ID | Student Name  | Github Username |
 |----------------|---------------|-----------------|
 |    24014534    |   Jiahe Fan   |     ocele       | 
-|    24014534    |   Jiahe Fan   |     LJanieL     |  
-|    24014534    |   Jiahe Fan   | Transparencency |  
-|    24014534    |   Jiahe Fan   | pilipalaboom27  |  
+|    23861003    |  Jianing Liu  |     LJanieL     |  
+|    23764722    |   Yapei Chen  | Transparencency |  
+|    23778972    |  Xudong Chen  | pilipalaboom27  |  
 
