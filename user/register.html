@@ -1,42 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Registration Page</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmEj+1a8Oq+ADSRpj+Kjf/gOyC0I6t7AP5YIuR2doMpTJ0j2K9/GR8StmcnZGpC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kuL29q7OZEKyT/n8tXCbTffItoe4EhdAehzJfu0V3uEUz1zPozSHUnn3AUIJsz0K" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="./style.css">
+  <title>Leaderboard</title>
 </head>
 <body>
-<div class="ring ring-large">
-  <i style="--clr:#00ff0a;"></i>
-  <i style="--clr:#ff0057;"></i>
-  <i style="--clr:#fffd44;"></i>
-  <div class="login">
-    <h2>Register</h2>
-    <div class="inputBx">
-      <input type="text" placeholder="First Name">
+  <!-- Navbar part -->
+  <nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/main/home.html">CoinQuest</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/main/home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/main/leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/index.html">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/profile.html">Profile</a>
+            </li>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="inputBx">
-      <input type="text" placeholder="Last Name">
+  </nav>
+  <div class="ring ring-large">
+    <i style="--clr:#00ff0a;"></i>
+    <i style="--clr:#ff0057;"></i>
+    <i style="--clr:#fffd44;"></i>
+    <div class="login">
+      <h2>Register</h2>
+      <div class="inputBx">
+        <input type="text" placeholder="First Name">
+      </div>
+      <div class="inputBx">
+        <input type="text" placeholder="Last Name">
+      </div>
+      <div class="inputBx">
+        <input type="email" placeholder="Email Address">
+      </div>
+      <div class="inputBx">
+        <input type="text" placeholder="Username">
+      </div>
+      <div class="inputBx">
+        <input type="password" placeholder="Password">
+      </div>
+      <div class="inputBx">
+        <input type="submit" value="Register">
+      </div>
+      <div class="links">
+        <a href="index.html">Back to Login</a>
+      </div>
     </div>
-    <div class="inputBx">
-      <input type="email" placeholder="Email Address">
-    </div>
-    <div class="inputBx">
-      <input type="text" placeholder="Username">
-    </div>
-    <div class="inputBx">
-      <input type="password" placeholder="Password">
-    </div>
-    <div class="inputBx">
-      <input type="submit" value="Register">
-    </div>
-    <div class="links">
-      <a href="index.html">Back to Login</a>
-    </div>
-  </div>
-</div>
 </body>
 </html>
