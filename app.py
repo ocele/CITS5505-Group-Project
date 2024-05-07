@@ -35,6 +35,36 @@ def home():
     puzzles = Puzzle.query.order_by(Puzzle.create_date.desc()).all()
     return render_template("home.html", puzzles=puzzles)
 
+# Register route
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """
+    Render the registration page and handle registration form submission.
+
+    Returns:
+        str: Rendered HTML content of the registration page.
+    """
+    if request.method == "POST":
+        # Handle registration form submission
+        flash("Registration successful!", "success")
+        return redirect(url_for("login"))
+    return render_template("register.html")
+
+# Login route
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """
+    Render the login page and handle login form submission.
+
+    Returns:
+        str: Rendered HTML content of the login page.
+    """
+    if request.method == "POST":
+        # Handle login form submission
+        flash("Login successful!", "success")
+        return redirect(url_for("home"))
+    return render_template("login.html")
+
 # Create puzzle route
 @app.route("/create_puzzle", methods=["GET", "POST"])
 def create_puzzle():
@@ -94,7 +124,3 @@ def leaderboard():
 # Run the application
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
