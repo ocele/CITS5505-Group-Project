@@ -19,7 +19,7 @@
       </button>
       <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -42,7 +42,7 @@
     </div>
   </nav>
     <div class="container mt-5 pt-5">
-        <h2 class="mt-3 mb-3 text-center fw-bold" style="font-size: 30px;">Form Submission</h2>
+        <h2 class="mt-3 mb-3 text-center fw-bold" style="font-size: 30px;">Submission Your Task</h2>
     <form action="your-server-endpoint" method="POST">
         <div class="mb-3">
             <label for="category" class="form-label">Category:</label>
@@ -69,6 +69,10 @@
         <div class="mb-3">
             <label for="rewards" class="form-label">Rewards:</label>
             <input type="number" class="form-control" id="rewards" name="rewards" required>
+        </div>
+        <div class="mb-3">
+            <label for="fileUpload" class="form-label fw-bold">File upload(If Necessary)</label>
+            <input type="file" class="form-control" id="profileImage">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
      </form>
