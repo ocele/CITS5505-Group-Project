@@ -8,15 +8,43 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///puzzles.db'
 db = SQLAlchemy(app)
 
-# Define database models
+#creat database
+
+request = db.Table('request',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('request_id', db.Integer, db.ForeignKey('request.id'), primary_key=True)
+)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    request = db.relationship('Request', secondary=request, lazy='subquery',backref=db.backref('accepted_by_users', lazy=True))
+    user_responses = db.relationship('Response', backref='response_user', lazy=True) 
+
+class Request(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    request_title = db.Column(db.String(120), nullable=False)
+    request_description = db.Column(db.String(300), nullable=False)
+    request_status = db.Column(db.String(10), default='open')
+    request_responses = db.relationship('Response', backref='response_request', lazy=True)
+
+class Response(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('request.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    response_text = db.Column(db.Text, nullable=False)
+
 class Puzzle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    creator = db.Column(db.String(50), nullable=False)
-    create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    solve_time = db.Column(db.DateTime)
-    solved_by = db.Column(db.String(50))
+    puzzle_title = db.Column(db.String(100), nullable=False)
+    puzzle_content = db.Column(db.Text, nullable=False)
+    puzzle_creator = db.Column(db.String(50), nullable=False)
+    puzzle_create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    puzzle_solve_time = db.Column(db.DateTime)
+    puzzle_solved_by = db.Column(db.String(50))
+
 
     def __repr__(self):
         return f'<Puzzle {self.id}>'
