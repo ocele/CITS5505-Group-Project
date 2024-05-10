@@ -13,7 +13,8 @@ body {
   background: #111;
   width: 100%;
   overflow: hidden;
-  background: radial-gradient(ellipse farthest-corner at center top, #f39264 0%, #f2606f 100%);
+  background-color: #111;
+  /* background: radial-gradient(ellipse farthest-corner at center top, #f39264 0%, #f2606f 100%); */
 }
 .ring {
   position: relative;

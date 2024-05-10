@@ -63,18 +63,22 @@
 		</div>
 		<!-- Sort BY -->
 		<div class="container mt-4">
-			<a href="./upload.html" class="btn btn-primary mb-3">Upload Your Task</a>
-			<div class="d-flex align-items-center">
-				<div class="me-2">
-					<label for="sortSelect" class="form-label">Sort by:</label>
+			<div class="d-flex" style="justify-content: space-between;">
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-primary upload_button">Upload Your Task</button>
 				</div>
-				<select class="form-select" id="sortSelect" aria-label="Task Sort" style="width: auto;">
-					<option selected>Select</option>
-					<option value="rewards-high">Rewards High to Low</option>
-					<option value="rewards-low">Rewards Low to High</option>
-					<option value="date-newest">Latest Uploads</option>
-					<option value="date-oldest">Oldest Uploads</option>
-				</select>
+				<div class="d-flex align-items-center">
+					<div class="me-2">
+						<label for="sortSelect" class="form-label">Sort by:</label>
+					</div>
+					<select class="form-select" id="sortSelect" aria-label="Task Sort" style="width: auto;">
+						<option selected>Select</option>
+						<option value="rewards-high">Rewards High to Low</option>
+						<option value="rewards-low">Rewards Low to High</option>
+						<option value="date-newest">Latest Uploads</option>
+						<option value="date-oldest">Oldest Uploads</option>
+					</select>
+				</div>
 			</div>
 			<!-- Tab Category -->
 			<ul class="nav nav-tabs mt-4">
@@ -152,7 +156,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- carousel -->
 		<!-- footer -->
 		<footer class="w-100 footer bg-dark text-white py-4 mt-5 fixed-bottom">
 			<div class="container">

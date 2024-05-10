@@ -30,13 +30,13 @@
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./home.html">Home</a>
+              <a class="nav-link" aria-current="page" href="./home.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./leaderboardAndRedeem.html">Leaderboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./index.html">Login</a>
+              <a class="nav-link active" href="./index.html">Login</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./profile.html">Profile</a>
@@ -63,7 +63,7 @@
       </div>
       <div class="links">
         <a href="javascript:void(0);" class="forgot_btn">Forgot Password</a>
-        <a href="register.html">Register</a>
+        <a href="register.html?type=1">Register</a>
       </div>
     </div>
   </div>
@@ -71,12 +71,10 @@
 
 <script>
 	$(function(){
-		// 判断是不是弹窗打开的 如果是 就隐藏导航栏
 		var search = window.location.search
 		if(search){
 			$("nav").hide()
 		}
-		// 登录 点击忘记密码
 		$(".forgot_btn").click(function() {
 			layer.open({
 				type: 2, 
