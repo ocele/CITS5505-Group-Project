@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
 
 # Initialize the Flask application
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'
+app = Flask(__name__, folder_main = 'main')
+app = Flask(__name__, folder_user = 'user')
+app.config['SECRET_KEY'] = '5505project'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///puzzles.db'
 db = SQLAlchemy(app)
 
@@ -54,24 +56,12 @@ class Puzzle(db.Model):
 # Home page route
 @app.route("/")
 def home():
-    """
-    Render the home page.
-
-    Returns:
-        str: Rendered HTML content of the home page.
-    """
     puzzles = Puzzle.query.order_by(Puzzle.create_date.desc()).all()
     return render_template("home.html", puzzles=puzzles)
 
 # Register route
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """
-    Render the registration page and handle registration form submission.
-
-    Returns:
-        str: Rendered HTML content of the registration page.
-    """
     if request.method == "POST":
         # Handle registration form submission
         flash("Registration successful!", "success")
@@ -81,17 +71,23 @@ def register():
 # Login route
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """
-    Render the login page and handle login form submission.
-
-    Returns:
-        str: Rendered HTML content of the login page.
-    """
+    error_message = None
     if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username = username)
         # Handle login form submission
-        flash("Login successful!", "success")
-        return redirect(url_for("home"))
-    return render_template("login.html")
+        if user and user.password == password
+            flash("Login successful!", "success")
+            return redirect(url_for('index'))
+        elif user:
+            flash('password is wrong, please check')
+        else:
+            flash('no user, please regist')
+            retrun render_template('register.html')
+
+    return redirect(url_for("home"))
+    return render_template("index.html")
 
 # Create puzzle route
 @app.route("/create_puzzle", methods=["GET", "POST"])
