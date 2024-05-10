@@ -19,6 +19,9 @@ request = db.Table('request',
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(80), unique=False, nullable=False)
+    lastname = db.Column(db.String(80), unique=False, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     request = db.relationship('Request', secondary=request, lazy='subquery',backref=db.backref('accepted_by_users', lazy=True))
@@ -63,8 +66,24 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # Handle registration form submission
-        flash("Registration successful!", "success")
+        firstname = request.form['First Name']
+        lastname = request.form['Last Name']
+        email = request.form['Email Address']
+        username = request.form['Username']
+        password = request.form['Password']
+
+        existuser = User.query.filter_by(username = username)
+        existemail = User.query.filter_by(email = email)
+        if exituser:
+            flash('username exist, please change a username')
+        if email:
+            flash('the email adress has been used, please check')
+        else:
+            new_user = User(firstname=firstname,lastname=lastname,email=email,username=username, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+            # Handle registration form submission
+            flash("Registration successful!", "success")
         return redirect(url_for("login"))
     return render_template("register.html")
 
