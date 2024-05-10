@@ -4,15 +4,16 @@ from flask_migrate import Migrate
 from datetime import datetime
 
 # Initialize the Flask application
-app = Flask(__name__, folder_main = 'main')
-app = Flask(__name__, folder_user = 'user')
+app = Flask(__name__, template_folder='main')
+app = Flask(__name__, static_folder='user')
 app.config['SECRET_KEY'] = '5505project'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///puzzles.db'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 #creat database
 
-request = db.Table('request',
+request = db.Table('requests',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('request_id', db.Integer, db.ForeignKey('request.id'), primary_key=True)
 )
@@ -96,14 +97,14 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(username = username)
         # Handle login form submission
-        if user and user.password == password
+        if user and user.password == password:
             flash("Login successful!", "success")
             return redirect(url_for('index'))
         elif user:
             flash('password is wrong, please check')
         else:
             flash('no user, please regist')
-            retrun render_template('register.html')
+        
 
     return redirect(url_for("home"))
     return render_template("index.html")
