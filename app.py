@@ -18,6 +18,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     requests = db.relationship('Request', backref='user', lazy=True)
+    rewards = db.Column(db.Integer, default=0)
 
 class Request(db.Model):
     __tablename__ = 'request'
@@ -44,7 +45,19 @@ class Task(db.Model):
 # Home page route
 @app.route("/")
 def home():
-    return render_template("home.html")
+    sort_option = request.args.get('sort', 'rewards-high')
+
+    if sort_option == 'rewards-high':
+        tasks = Task.query.order_by(Task.rewards.desc()).all()
+    elif sort_option == 'rewards-low':
+        tasks = Task.query.order_by(Task.rewards).all()
+    elif sort_option == 'date-newest':
+        tasks = Task.query.order_by(Task.deadline.desc()).all()
+    elif sort_option == 'date-oldest':
+        tasks = Task.query.order_by(Task.deadline).all()
+    else:
+        tasks = Task.query.all()
+    return render_template("home.html", tasks=tasks)
 
 # Login route
 @app.route("/index.html", methods=["GET", "POST"])
@@ -127,6 +140,11 @@ def profile():
             return render_template("profile.html", user=user)
     flash("You need to log in first.", "warning")
     return redirect(url_for("login"))
+
+@app.route('/leaderboard.html')
+def leaderboard():
+    users = User.query.order_by(User.rewards.desc()).limit(50).all()
+    return render_template('leaderboard.html', users=users)
 
 if __name__ == "__main__":
     with app.app_context():
