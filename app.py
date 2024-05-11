@@ -2,48 +2,31 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
-# 某处错误地将 SQLAlchemy 的 Table 对象当作 Flask 的 request 对象使用了
-# 确保你正确地从 Flask 导入了 request 对象。正确的导入语句应该是：
 
-from flask import request
-
-
-
-# Initialize the Flask application
 app = Flask(__name__, template_folder='templates')
-app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = '5505project'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///puzzles.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-#creat database
-
-# ！！！！！！！！！！！！！！！！！！！！！！！！！！
-# 原先的问题“AttributeError: 'Table' object has no attribute 'method'”不太可能仅仅是因为缺少 from flask import request 这一行导致的。根据错误信息和之前的讨论，问题更多是因为 request 这个名称被误用为了 SQLAlchemy 的 Table 对象，从而覆盖了 Flask 的 request 对象。
-#你错误地将 request 这个名字用于定义一个 SQLAlchemy 的 Table 对象。这导致了之后在函数中试图访问 request.method 时发生错误，因为这时的 request 已经不再是 Flask 的请求对象，而是一个表对象，自然没有 method 这个属性。
-# request = db.Table('requests',
-#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#     db.Column('request_id', db.Integer, db.ForeignKey('request.id'), primary_key=True)
-# )
-
 class User(db.Model):
+    __tablename__ = 'user'  # Specify the table name explicitly
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(80), unique=False, nullable=False)
-    lastname = db.Column(db.String(80), unique=False, nullable=False)
+    firstname = db.Column(db.String(80), nullable=False)
+    lastname = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    request = db.relationship('Request', secondary=request, lazy='subquery',backref=db.backref('accepted_by_users', lazy=True))
-    user_responses = db.relationship('Response', backref='response_user', lazy=True) 
+    requests = db.relationship('Request', backref='user', lazy=True)
 
 class Request(db.Model):
+    __tablename__ = 'request'  # Specify the table name explicitly
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     request_title = db.Column(db.String(120), nullable=False)
     request_description = db.Column(db.String(300), nullable=False)
     request_status = db.Column(db.String(10), default='open')
-    request_responses = db.relationship('Response', backref='response_request', lazy=True)
+    responses = db.relationship('Response', backref='request', lazy=True)
 
 class Response(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,11 +42,6 @@ class Puzzle(db.Model):
     puzzle_create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     puzzle_solve_time = db.Column(db.DateTime)
     puzzle_solved_by = db.Column(db.String(50))
-
-
-    def __repr__(self):
-        return f'<Puzzle {self.id}>'
-
 # Define routes and view functions
 
 # Home page route
@@ -71,46 +49,29 @@ class Puzzle(db.Model):
 def home():
     return render_template("home.html")
 
-# Register route
 @app.route("/register.html", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        firstname = request.form['First Name']
-        lastname = request.form['Last Name']
-        email = request.form['Email Address']
-        username = request.form['Username']
-        password = request.form['Password']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
 
         existing_user = User.query.filter_by(username=username).first()
         existing_email = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Username already exists. Please choose a different username.')
-        if existing_email:
+        elif existing_email:
             flash('The email address has already been used. Please use a different email address.')
         else:
             new_user = User(firstname=firstname, lastname=lastname, email=email, username=username, password=password)
             db.session.add(new_user)
             db.session.commit()
             flash("Registration successful!", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("home"))
     return render_template("register.html")
 
-# Login route
-# @app.route("/index.html", methods=["GET", "POST"])
-# def login():
-#     if request.method == "POST":
-#         username = request.form['username']
-#         password = request.form['password']
-#         user = User.query.filter_by(username=username).first()
-#         if user:
-#             if user.password == password:
-#                 flash("Login successful!", "success")
-#                 return redirect(url_for('home'))
-#             else:
-#                 flash('Incorrect password. Please try again.')
-#         else:
-#             flash('User does not exist. Please register.')
-#         return render_template("index.html")
 
 @app.route("/index.html", methods=["GET", "POST"])
 def login():
@@ -126,8 +87,7 @@ def login():
                 flash('Incorrect password. Please try again.')
         else:
             flash('User does not exist. Please register.')
-    
-    # 确保无论如何都有返回
+
     return render_template("index.html")
 
 # Create puzzle route
@@ -188,4 +148,6 @@ def login():
 
 # Run the application
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
