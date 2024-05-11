@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 class User(db.Model):
-    __tablename__ = 'user'  # Specify the table name explicitly
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(80), nullable=False)
     lastname = db.Column(db.String(80), nullable=False)
@@ -20,7 +20,7 @@ class User(db.Model):
     requests = db.relationship('Request', backref='user', lazy=True)
 
 class Request(db.Model):
-    __tablename__ = 'request'  # Specify the table name explicitly
+    __tablename__ = 'request'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     request_title = db.Column(db.String(120), nullable=False)
@@ -40,13 +40,31 @@ class Task(db.Model):
     content = db.Column(db.Text, nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
     rewards = db.Column(db.Integer, nullable=False)
-# Define routes and view functions
 
 # Home page route
 @app.route("/")
 def home():
     return render_template("home.html")
 
+# Login route
+@app.route("/index.html", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user:
+            if user.password == password:
+                session['user_id'] = user.id  # Store user ID in session
+                flash("Login successful!", "success")
+                return redirect(url_for('home'))
+            else:
+                flash('Incorrect password. Please try again.', "danger")
+        else:
+            flash('User does not exist. Please register.', "danger")
+    return render_template("index.html")
+
+# Register route
 @app.route("/register.html", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -59,9 +77,9 @@ def register():
         existing_user = User.query.filter_by(username=username).first()
         existing_email = User.query.filter_by(email=email).first()
         if existing_user:
-            flash('Username already exists. Please choose a different username.')
+            flash('Username already exists. Please choose a different username.', "danger")
         elif existing_email:
-            flash('The email address has already been used. Please use a different email address.')
+            flash('The email address has already been used. Please use a different email address.', "danger")
         else:
             new_user = User(firstname=firstname, lastname=lastname, email=email, username=username, password=password)
             db.session.add(new_user)
@@ -70,26 +88,20 @@ def register():
             return redirect(url_for("home"))
     return render_template("register.html")
 
+# Logout route
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)  # Remove user ID from session
+    flash("You have been logged out.", "info")
+    return redirect(url_for('home'))
 
-@app.route("/index.html", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user:
-            if user.password == password:
-                flash("Login successful!", "success")
-                return redirect(url_for('home'))
-            else:
-                flash('Incorrect password. Please try again.')
-        else:
-            flash('User does not exist. Please register.')
-
-    return render_template("index.html")
-
+# Upload page route
 @app.route("/upload.html", methods=["GET", "POST"])
 def upload():
+    if 'user_id' not in session:
+        flash("Please log in first.", "danger")
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         title = request.form['title']
         content = request.form['content']
@@ -104,63 +116,18 @@ def upload():
         return redirect(url_for("home"))
     
     return render_template("upload.html")
-# Create puzzle route
-# @app.route("/create_puzzle", methods=["GET", "POST"])
-# def create_puzzle():
-#     """
-#     Render the puzzle creation page and handle puzzle creation form submission.
 
-#     Returns:
-#         str: Rendered HTML content of the puzzle creation page.
-#     """
-#     if request.method == "POST":
-#         title = request.form["title"]
-#         content = request.form["content"]
-#         creator = request.form["creator"]
-#         puzzle = Puzzle(title=title, content=content, creator=creator)
-#         db.session.add(puzzle)
-#         db.session.commit()
-#         flash("Puzzle created successfully!", "success")
-#         return redirect(url_for("home"))
-#     return render_template("create_puzzle.html")
+# Profile page route
+@app.route("/profile.html")
+def profile():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        if user:
+            return render_template("profile.html", user=user)
+    flash("You need to log in first.", "warning")
+    return redirect(url_for("login"))
 
-# Solve puzzle route
-# @app.route("/solve_puzzle/<int:puzzle_id>", methods=["GET", "POST"])
-# def solve_puzzle(puzzle_id):
-#     """
-#     Render the puzzle solving page and handle puzzle solving form submission.
-
-#     Args:
-#         puzzle_id (int): The ID of the puzzle to solve.
-
-#     Returns:
-#         str: Rendered HTML content of the puzzle solving page.
-#     """
-#     puzzle = Puzzle.query.get_or_404(puzzle_id)
-#     if request.method == "POST":
-#         if not puzzle.solved_by:
-#             puzzle.solve_time = datetime.utcnow()
-#             puzzle.solved_by = request.form["solver"]
-#             db.session.commit()
-#             flash("Puzzle solved successfully!", "success")
-#         else:
-#             flash("Puzzle has already been solved!", "danger")
-#         return redirect(url_for("home"))
-#     return render_template("solve_puzzle.html", puzzle=puzzle)
-
-# Leaderboard route
-# @app.route("/leaderboard")
-# def leaderboard():
-#     """
-#     Render the leaderboard page.
-
-#     Returns:
-#         str: Rendered HTML content of the leaderboard page.
-#     """
-#     fastest_puzzles = Puzzle.query.filter(Puzzle.solved_by.isnot(None)).order_by(Puzzle.solve_time).limit(10).all()
-#     return render_template("leaderboard.html", fastest_puzzles=fastest_puzzles)
-
-# Run the application
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
