@@ -4,8 +4,8 @@ from flask_migrate import Migrate
 from datetime import datetime
 
 # Initialize the Flask application
-app = Flask(__name__, template_folder='main')
-app = Flask(__name__, static_folder='user')
+app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = '5505project'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///puzzles.db'
 db = SQLAlchemy(app)
@@ -60,11 +60,10 @@ class Puzzle(db.Model):
 # Home page route
 @app.route("/")
 def home():
-    puzzles = Puzzle.query.order_by(Puzzle.create_date.desc()).all()
-    return render_template("home.html", puzzles=puzzles)
+    return render_template("home.html")
 
 # Register route
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register.html", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         firstname = request.form['First Name']
@@ -73,41 +72,36 @@ def register():
         username = request.form['Username']
         password = request.form['Password']
 
-        existuser = User.query.filter_by(username = username)
-        existemail = User.query.filter_by(email = email)
-        if exituser:
-            flash('username exist, please change a username')
-        if email:
-            flash('the email adress has been used, please check')
+        existing_user = User.query.filter_by(username=username).first()
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Username already exists. Please choose a different username.')
+        if existing_email:
+            flash('The email address has already been used. Please use a different email address.')
         else:
-            new_user = User(firstname=firstname,lastname=lastname,email=email,username=username, password=password)
+            new_user = User(firstname=firstname, lastname=lastname, email=email, username=username, password=password)
             db.session.add(new_user)
             db.session.commit()
-            # Handle registration form submission
             flash("Registration successful!", "success")
-        return redirect(url_for("login"))
+            return redirect(url_for("index"))
     return render_template("register.html")
 
 # Login route
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/index.html", methods=["GET", "POST"])
 def login():
-    error_message = None
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username = username)
-        # Handle login form submission
-        if user and user.password == password:
-            flash("Login successful!", "success")
-            return redirect(url_for('index'))
-        elif user:
-            flash('password is wrong, please check')
+        user = User.query.filter_by(username=username).first()
+        if user:
+            if user.password == password:
+                flash("Login successful!", "success")
+                return redirect(url_for('home'))
+            else:
+                flash('Incorrect password. Please try again.')
         else:
-            flash('no user, please regist')
-        
-
-    return redirect(url_for("home"))
-    return render_template("index.html")
+            flash('User does not exist. Please register.')
+        return render_template("index.html")
 
 # Create puzzle route
 @app.route("/create_puzzle", methods=["GET", "POST"])
