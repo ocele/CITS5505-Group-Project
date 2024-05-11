@@ -34,14 +34,12 @@ class Response(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     response_text = db.Column(db.Text, nullable=False)
 
-class Puzzle(db.Model):
+class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    puzzle_title = db.Column(db.String(100), nullable=False)
-    puzzle_content = db.Column(db.Text, nullable=False)
-    puzzle_creator = db.Column(db.String(50), nullable=False)
-    puzzle_create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    puzzle_solve_time = db.Column(db.DateTime)
-    puzzle_solved_by = db.Column(db.String(50))
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    deadline = db.Column(db.DateTime, nullable=False)
+    rewards = db.Column(db.Integer, nullable=False)
 # Define routes and view functions
 
 # Home page route
@@ -90,6 +88,22 @@ def login():
 
     return render_template("index.html")
 
+@app.route("/upload.html", methods=["GET", "POST"])
+def upload():
+    if request.method == "POST":
+        title = request.form['title']
+        content = request.form['content']
+        deadline = datetime.strptime(request.form['deadline'], '%Y-%m-%d')
+        rewards = int(request.form['rewards'])
+
+        new_task = Task(title=title, content=content, deadline=deadline, rewards=rewards)
+        db.session.add(new_task)
+        db.session.commit()
+
+        flash("Task uploaded successfully!", "success")
+        return redirect(url_for("home"))
+    
+    return render_template("upload.html")
 # Create puzzle route
 # @app.route("/create_puzzle", methods=["GET", "POST"])
 # def create_puzzle():
