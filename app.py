@@ -3,6 +3,36 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 
+@app.route("/index.html",methods=["GET"])
+def indexhtml():
+    return render_template('index.html)
+                           
+@app.route("/home.html",methods=["GET"])
+def homehtml():
+    return render_template('home.html')    
+
+@app.route("/leaderboardAndRedeem.html",methods=["GET"])
+def leaderboardAndRedeemhtml():
+    return render_template('leaderboardAndRedeem.html')
+    
+@app.route("/password.html",methods=["GET"])
+def passwordhtml():
+    return render_template('password.html')
+
+@app.route("/profile.html",methods=["GET"])
+def profilehtml():
+    return render_template('profile.html')
+
+@app.route("/register.html",methods=["GET"])
+def registerhtml():
+    return render_template('register.html')
+
+@app.route("/upload.html",methods=["GET"])
+def uploadhtml():
+    return render_template('upload.html')
+
+
+
 # Initialize the Flask application
 app = Flask(__name__, template_folder='templates')
 app = Flask(__name__, static_folder='static')
