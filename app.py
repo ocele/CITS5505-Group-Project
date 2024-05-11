@@ -2,6 +2,12 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
+# 某处错误地将 SQLAlchemy 的 Table 对象当作 Flask 的 request 对象使用了
+# 确保你正确地从 Flask 导入了 request 对象。正确的导入语句应该是：
+
+from flask import request
+
+
 
 # Initialize the Flask application
 app = Flask(__name__, template_folder='templates')
@@ -13,10 +19,13 @@ migrate = Migrate(app, db)
 
 #creat database
 
-request = db.Table('requests',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('request_id', db.Integer, db.ForeignKey('request.id'), primary_key=True)
-)
+# ！！！！！！！！！！！！！！！！！！！！！！！！！！
+# 原先的问题“AttributeError: 'Table' object has no attribute 'method'”不太可能仅仅是因为缺少 from flask import request 这一行导致的。根据错误信息和之前的讨论，问题更多是因为 request 这个名称被误用为了 SQLAlchemy 的 Table 对象，从而覆盖了 Flask 的 request 对象。
+#你错误地将 request 这个名字用于定义一个 SQLAlchemy 的 Table 对象。这导致了之后在函数中试图访问 request.method 时发生错误，因为这时的 request 已经不再是 Flask 的请求对象，而是一个表对象，自然没有 method 这个属性。
+# request = db.Table('requests',
+#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#     db.Column('request_id', db.Integer, db.ForeignKey('request.id'), primary_key=True)
+# )
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -87,6 +96,22 @@ def register():
     return render_template("register.html")
 
 # Login route
+# @app.route("/index.html", methods=["GET", "POST"])
+# def login():
+#     if request.method == "POST":
+#         username = request.form['username']
+#         password = request.form['password']
+#         user = User.query.filter_by(username=username).first()
+#         if user:
+#             if user.password == password:
+#                 flash("Login successful!", "success")
+#                 return redirect(url_for('home'))
+#             else:
+#                 flash('Incorrect password. Please try again.')
+#         else:
+#             flash('User does not exist. Please register.')
+#         return render_template("index.html")
+
 @app.route("/index.html", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -101,63 +126,65 @@ def login():
                 flash('Incorrect password. Please try again.')
         else:
             flash('User does not exist. Please register.')
-        return render_template("index.html")
+    
+    # 确保无论如何都有返回
+    return render_template("index.html")
 
 # Create puzzle route
-@app.route("/create_puzzle", methods=["GET", "POST"])
-def create_puzzle():
-    """
-    Render the puzzle creation page and handle puzzle creation form submission.
+# @app.route("/create_puzzle", methods=["GET", "POST"])
+# def create_puzzle():
+#     """
+#     Render the puzzle creation page and handle puzzle creation form submission.
 
-    Returns:
-        str: Rendered HTML content of the puzzle creation page.
-    """
-    if request.method == "POST":
-        title = request.form["title"]
-        content = request.form["content"]
-        creator = request.form["creator"]
-        puzzle = Puzzle(title=title, content=content, creator=creator)
-        db.session.add(puzzle)
-        db.session.commit()
-        flash("Puzzle created successfully!", "success")
-        return redirect(url_for("home"))
-    return render_template("create_puzzle.html")
+#     Returns:
+#         str: Rendered HTML content of the puzzle creation page.
+#     """
+#     if request.method == "POST":
+#         title = request.form["title"]
+#         content = request.form["content"]
+#         creator = request.form["creator"]
+#         puzzle = Puzzle(title=title, content=content, creator=creator)
+#         db.session.add(puzzle)
+#         db.session.commit()
+#         flash("Puzzle created successfully!", "success")
+#         return redirect(url_for("home"))
+#     return render_template("create_puzzle.html")
 
 # Solve puzzle route
-@app.route("/solve_puzzle/<int:puzzle_id>", methods=["GET", "POST"])
-def solve_puzzle(puzzle_id):
-    """
-    Render the puzzle solving page and handle puzzle solving form submission.
+# @app.route("/solve_puzzle/<int:puzzle_id>", methods=["GET", "POST"])
+# def solve_puzzle(puzzle_id):
+#     """
+#     Render the puzzle solving page and handle puzzle solving form submission.
 
-    Args:
-        puzzle_id (int): The ID of the puzzle to solve.
+#     Args:
+#         puzzle_id (int): The ID of the puzzle to solve.
 
-    Returns:
-        str: Rendered HTML content of the puzzle solving page.
-    """
-    puzzle = Puzzle.query.get_or_404(puzzle_id)
-    if request.method == "POST":
-        if not puzzle.solved_by:
-            puzzle.solve_time = datetime.utcnow()
-            puzzle.solved_by = request.form["solver"]
-            db.session.commit()
-            flash("Puzzle solved successfully!", "success")
-        else:
-            flash("Puzzle has already been solved!", "danger")
-        return redirect(url_for("home"))
-    return render_template("solve_puzzle.html", puzzle=puzzle)
+#     Returns:
+#         str: Rendered HTML content of the puzzle solving page.
+#     """
+#     puzzle = Puzzle.query.get_or_404(puzzle_id)
+#     if request.method == "POST":
+#         if not puzzle.solved_by:
+#             puzzle.solve_time = datetime.utcnow()
+#             puzzle.solved_by = request.form["solver"]
+#             db.session.commit()
+#             flash("Puzzle solved successfully!", "success")
+#         else:
+#             flash("Puzzle has already been solved!", "danger")
+#         return redirect(url_for("home"))
+#     return render_template("solve_puzzle.html", puzzle=puzzle)
 
 # Leaderboard route
-@app.route("/leaderboard")
-def leaderboard():
-    """
-    Render the leaderboard page.
+# @app.route("/leaderboard")
+# def leaderboard():
+#     """
+#     Render the leaderboard page.
 
-    Returns:
-        str: Rendered HTML content of the leaderboard page.
-    """
-    fastest_puzzles = Puzzle.query.filter(Puzzle.solved_by.isnot(None)).order_by(Puzzle.solve_time).limit(10).all()
-    return render_template("leaderboard.html", fastest_puzzles=fastest_puzzles)
+#     Returns:
+#         str: Rendered HTML content of the leaderboard page.
+#     """
+#     fastest_puzzles = Puzzle.query.filter(Puzzle.solved_by.isnot(None)).order_by(Puzzle.solve_time).limit(10).all()
+#     return render_template("leaderboard.html", fastest_puzzles=fastest_puzzles)
 
 # Run the application
 if __name__ == "__main__":
