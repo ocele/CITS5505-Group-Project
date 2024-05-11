@@ -12,6 +12,26 @@
     <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/layui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../static/js/scripts.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById('searchInput');
+            const cards = document.querySelectorAll('.card');
+            const searchButton = document.getElementById('searchButton');
+
+            searchButton.addEventListener('click', function () {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+
+                cards.forEach(card => {
+                    const title = card.querySelector('.card-title').innerText.trim().toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body class="">
 <!-- Navbar part -->
@@ -53,9 +73,9 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search..." aria-label="Search"
+                <input type="text" class="form-control" id="searchInput" placeholder="Search..." aria-label="Search"
                        aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
             </div>
         </div>
     </div>
@@ -71,11 +91,10 @@
                 <label for="sortSelect" class="form-label">Sort by:</label>
             </div>
             <select class="form-select" id="sortSelect" aria-label="Task Sort" style="width: auto;">
-                <option selected>Select</option>
-                <option value="rewards-high">Rewards High to Low</option>
-                <option value="rewards-low">Rewards Low to High</option>
-                <option value="date-newest">Latest Uploads</option>
-                <option value="date-oldest">Oldest Uploads</option>
+                <option value="rewards-high" {% if sort_option == 'rewards-high' %}selected{% endif %}>Rewards High to Low</option>
+                <option value="rewards-low" {% if sort_option == 'rewards-low' %}selected{% endif %}>Rewards Low to High</option>
+                <option value="date-newest" {% if sort_option == 'date-newest' %}selected{% endif %}>Latest Uploads</option>
+                <option value="date-oldest" {% if sort_option == 'date-oldest' %}selected{% endif %}>Oldest Uploads</option>
             </select>
         </div>
     </div>
@@ -122,8 +141,13 @@
                                     <form id="answerForm">
                                         <div class="mb-3">
                                             <label for="answerText" class="form-label">Your Answer</label>
-                                            <textarea class="form-control" id="answerText" rows="3" required></textarea>
+                                            <textarea class="form-control" id="answerText" rows="3"
+                                                      required></textarea>
                                         </div>
+                                        <!-- <div class="mb-3">
+                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                            <input class="form-control" type="file" id="fileUpload">
+                                        </div> -->
                                     </form>
                                 </div>
                                 <div class="modal-footer">

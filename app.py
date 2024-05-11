@@ -57,6 +57,8 @@ def home():
         tasks = Task.query.order_by(Task.deadline).all()
     else:
         tasks = Task.query.all()
+    search_term = request.args.get('search', '').strip().lower()
+    tasks = Task.query.filter(Task.title.ilike(f'%{search_term}%')).all()
     return render_template("home.html", tasks=tasks)
 
 # Login route
