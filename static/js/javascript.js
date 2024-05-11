@@ -27,10 +27,10 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.json())
             .then(data => {
-                alert('已经发送重置链接到你的邮箱');
+                alert('Email has been send...');
             })
             .catch(error => {
-                alert('发送邮件时出错，请稍后再试');
+                alert('Retry');
             });
         }
     });
