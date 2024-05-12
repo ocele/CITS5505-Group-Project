@@ -51,23 +51,6 @@
     <i style="--clr:#fffd44;"></i>
     <div class="login">
       <h2>Sign In</h2>
-<<<<<<< HEAD
-
-      <form method="POST"> <!-- Added form tag -->
-        <div class="inputBx">
-          <input type="text" name="username" placeholder="Username"> <!-- Modified input name attribute -->
-        </div>
-        <div class="inputBx">
-          <input type="password" name="password" placeholder="Password"> <!-- Modified input name attribute -->
-        </div>
-        <div class="inputBx">
-          <input type="submit" value="Log In">
-        </div>
-      </form>
-
-<<<<<<< HEAD
-=======
->>>>>>> parent of 8afaebf (correct route)
       <div class="inputBx">
         <input type="text" placeholder="Username" id="username">
       </div>
@@ -77,8 +60,7 @@
       <div class="inputBx">
         <input type="button" id="login_btn" value="Log In">
       </div>
-=======
->>>>>>> 86baeb2464a5e1fe3f988c25c7f74be49af0e828
+
       <div class="links">
         <a href="javascript:void(0);" class="forgot_btn">Forgot Password</a>
         <a href="register.html?type=1">Register</a>
@@ -88,7 +70,6 @@
 </html>
 
 <script>
-<<<<<<< HEAD
 	$(function(){
 		var search = window.location.search
 		if(search){
@@ -121,20 +102,3 @@
 		})
 	})
 </script>
-=======
-  $(function(){
-    var search = window.location.search
-    if(search){
-      $("nav").hide()
-    }
-    $(".forgot_btn").click(function() {
-      layer.open({
-        type: 2, 
-        title: 'Login', 
-        content: './password.html?type=1', 
-        area: ['1000px', '760px'], 
-      });
-    })
-  })
-</script>
->>>>>>> 86baeb2464a5e1fe3f988c25c7f74be49af0e828
