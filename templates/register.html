@@ -47,36 +47,29 @@
     <i style="--clr:#fffd44;"></i>
     <div class="login">
       <h2>Register</h2>
-      <div class="inputBx">
-        <input type="text" placeholder="First Name">
-      </div>
-      <div class="inputBx">
-        <input type="text" placeholder="Last Name">
-      </div>
-      <div class="inputBx">
-        <input type="email" placeholder="Email Address">
-      </div>
-      <div class="inputBx">
-        <input type="text" placeholder="Username">
-      </div>
-      <div class="inputBx">
-        <input type="password" placeholder="Password">
-      </div>
-      <div class="inputBx">
-        <input type="submit" value="Register">
-      </div>
+      <form method="post" action="/register.html"> <!-- Added form method and action -->
+        <div class="inputBx">
+          <input type="text" placeholder="First Name" name="firstname"> <!-- Added name attribute -->
+        </div>
+        <div class="inputBx">
+          <input type="text" placeholder="Last Name" name="lastname"> <!-- Added name attribute -->
+        </div>
+        <div class="inputBx">
+          <input type="email" placeholder="Email Address" name="email"> <!-- Added name attribute -->
+        </div>
+        <div class="inputBx">
+          <input type="text" placeholder="Username" name="username"> <!-- Added name attribute -->
+        </div>
+        <div class="inputBx">
+          <input type="password" placeholder="Password" name="password"> <!-- Added name attribute -->
+        </div>
+        <div class="inputBx">
+          <input type="submit" name="submit" value="Register"> <!-- Added name attribute -->
+        </div>
+      </form>
       <div class="links">
         <a href="./index.html?type=1">Back to Login</a>
       </div>
     </div>
 </body>
 </html>
-
-<script>
-	$(function(){
-		var search = window.location.search
-		if(search){
-			$("nav").hide()
-		}
-	})
-</script>
