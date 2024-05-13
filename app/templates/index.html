@@ -12,26 +12,6 @@
     <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/layui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../static/js/scripts.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.getElementById('searchInput');
-            const cards = document.querySelectorAll('.card');
-            const searchButton = document.getElementById('searchButton');
-
-            searchButton.addEventListener('click', function () {
-                const searchTerm = searchInput.value.trim().toLowerCase();
-
-                cards.forEach(card => {
-                    const title = card.querySelector('.card-title').innerText.trim().toLowerCase();
-                    if (title.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 <body class="">
 <!-- Navbar part -->
@@ -63,7 +43,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="./profile.html">Profile</a>
                     </li>
-                    </form>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </div>
