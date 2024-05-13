@@ -11,7 +11,7 @@
 <!-- Navbar part -->
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="./home.html">CoinQuest</a>
+        <a class="navbar-brand" href="./index.html">CoinQuest</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -26,13 +26,13 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="./home.html">Home</a>
+                        <a class="nav-link" aria-current="page" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./leaderboardAndRedeem.html">Leaderboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./index.html">Login</a>
+                        <a class="nav-link" href="./login.html">Login</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="./profile.html">Profile</a>
@@ -53,7 +53,47 @@
                             <img src="../static/images/champ.png" width="80" height="80"
                                  style="border: 3px solid #f2706b;border-radius: 100%;" alt=""/>
                         </div>
-                        <div class="row mb-3">
+						<div class="row mb-3">
+							<div class="mb-3">
+                                <label for="rewards" class="form-label fw-bold">Rewards</label>
+                                <input type="text" class="form-control" id="rewards" readonly>
+                            </div>
+							<div class="col-md-6">
+								<label for="firstname" class="form-label fw-bold">First Name</label>
+								<input type="text" class="form-control" id="firstname">
+							</div>
+							<div class="col-md-6">
+								<label for="lastname" class="form-label fw-bold">Last Name</label>
+								<input type="text" class="form-control" id="lastname">
+							</div>
+						</div>
+							<div class="mb-3">
+								<label for="username" class="form-label fw-bold">Username</label>
+								<input type="text" class="form-control" id="username">
+							</div>
+							<div class="mb-3">
+								<label for="password" class="form-label fw-bold">Password</label>
+								<input type="password" class="form-control" id="password">
+							</div>
+							<div class="mb-3">
+								<label for="dob" class="form-label fw-bold">Date of Birth</label>
+								<input type="date" class="form-control" id="dob">
+							</div>
+							<div class="mb-3">
+								<label for="profileImage" class="form-label fw-bold">Profile Image</label>
+								<input type="file" class="form-control" id="profileImage">
+							</div>
+							<button type="submit" class="btn btn-primary">Save Changes</button>
+						</div>
+                        <!-- <div class="row mb-3">
+							<div class="mb-3">
+								<label for="username" class="form-label fw-bold">Username</label>
+								<input type="text" class="form-control" id="dob" value="{{ user.username }}" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="eamiladdress" class="form-label fw-bold">Username</label>
+								<input type="text" class="form-control" id="dob" value="{{ user.username }}" readonly>
+							</div>
                             <div class="mb-3">
                                 <label for="rewards" class="form-label fw-bold">Rewards</label>
                                 <input type="text" class="form-control" id="rewards" readonly>
@@ -66,11 +106,8 @@
                                 <label for="lastname" class="form-label fw-bold">Last Name</label>
                                 <input type="text" class="form-control" id="lastname" value="{{ user.lastname }}" readonly>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="username" class="form-label fw-bold">Username</label>
-                            <input type="text" class="form-control" id="dob" value="{{ user.username }}" readonly>
-                        </div>
+                        </div> -->
+						
                     </div>
                 </form>
             </div>

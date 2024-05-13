@@ -52,13 +52,13 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link  href="./home.html">Home</a>
+                        <a class="nav-link" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./leaderboard.html">Leaderboard</a>
                     </li>
                     <li class="nav-item nav_login">
-                        <a class="nav-link" href="./index.html">Login</a>
+                        <a class="nav-link" href="./login.html">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./profile.html">Profile</a>
@@ -91,10 +91,11 @@
                 <label for="sortSelect" class="form-label">Sort by:</label>
             </div>
             <select class="form-select" id="sortSelect" aria-label="Task Sort" style="width: auto;">
-                <option value="rewards-high" {% if sort_option == 'rewards-high' %}selected{% endif %}>Rewards High to Low</option>
-                <option value="rewards-low" {% if sort_option == 'rewards-low' %}selected{% endif %}>Rewards Low to High</option>
-                <option value="date-newest" {% if sort_option == 'date-newest' %}selected{% endif %}>Latest Uploads</option>
-                <option value="date-oldest" {% if sort_option == 'date-oldest' %}selected{% endif %}>Oldest Uploads</option>
+                <option selected>Select</option>
+                <option value="rewards-high">Rewards High to Low</option>
+                <option value="rewards-low">Rewards Low to High</option>
+                <option value="date-newest">Latest Uploads</option>
+                <option value="date-oldest">Oldest Uploads</option>
             </select>
         </div>
     </div>
@@ -116,53 +117,50 @@
     <!-- Tab card content (User Uploads) -->
     <div class="tab-content">
         <div class="tab-pane fade show active" id="coding">
+            <!-- 确保您的视图函数传递了一个名为 tasks 的列表 -->
             {% for task in tasks %}
-            <div class="card mt-3">
-                <div class="card-body">
-                    <h5 class="card-title">Title: {{ task.title }}</h5>
-                    <p class="card-text"><strong>Content:</strong> {{ task.content }}</p>
-                    <p class="card-text"><strong>Deadline:</strong> {{ task.deadline }}</p>
-                    <p class="card-text"><strong>Rewards:</strong> {{ task.rewards }}</p>
-                    <p class="card-text"><strong>Uploaded:</strong> {{ task.uploaded }}</p>
-                    <button class="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#answerModal">
-                        Answer Question
-                    </button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="answerModalLabel">Answer Question</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="answerForm">
-                                        <div class="mb-3">
-                                            <label for="answerText" class="form-label">Your Answer</label>
-                                            <textarea class="form-control" id="answerText" rows="3"
-                                                      required></textarea>
-                                        </div>
-                                        <!-- <div class="mb-3">
-                                            <label for="fileUpload" class="form-label">Upload File</label>
-                                            <input class="form-control" type="file" id="fileUpload">
-                                        </div> -->
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" form="answerForm">Submit Answer</button>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Title: {{ task.title }}</h5>
+                        <p class="card-text"><strong>Content:</strong> {{ task.content }}</p>
+                        <p class="card-text"><strong>Deadline:</strong> {{ task.deadline }}</p>
+                        <p class="card-text"><strong>Rewards:</strong> {{ task.rewards }}</p>
+                        <p class="card-text"><strong>Uploaded:</strong> {{ task.uploaded }}</p>
+                        <button class="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#answerModal{{ task.id }}">
+                            Answer Question
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="answerModal{{ task.id }}" tabindex="-1" aria-labelledby="answerModalLabel{{ task.id }}"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="answerModalLabel{{ task.id }}">Answer Question</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="answerForm{{ task.id }}">
+                                            <div class="mb-3">
+                                                <label for="answerText{{ task.id }}" class="form-label">Your Answer</label>
+                                                <textarea class="form-control" id="answerText{{ task.id }}" rows="3"
+                                                          required></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" form="answerForm{{ task.id }}">Submit Answer</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
         <!-- Add similar card content for other tabs if needed -->
-    </div>
+    </div>    
 </div>
 <!-- footer -->
 <footer class="w-100 footer bg-dark text-white py-4 mt-5 fixed-bottom">
