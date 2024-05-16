@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Requests</title>
+</head>
+<body>
+    <h1>Search Requests</h1>
+    <form method="get">
+        <input type="text" name="keyword" placeholder="Search keyword">
+        <button type="submit">Search</button>
+    </form>
+    <h2>Search Results</h2>
+    {% if requests %}
+        <ul>
+            {% for request in requests %}
+                <li><a href="{{ url_for('view_request', request_id=request.id) }}">{{ request.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    <a href="{{ url_for('user_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
