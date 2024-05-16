@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文章页面</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.6.8/css/layui.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    
+</head>
+
+<body>
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <div class="article">
+                    <h1>{{art.title}}</h1>
+                    <div class="article-info">
+                        <img class="avatar" src="{{url_for('static',filename="photo/"+userdata.photopath)}}">
+                        <span class="author">Author:{{userdata.username}}</span>
+                        <span class="time">Upload time:{{art.create_time}}</span>
+                    </div>
+                    <p>{{art.content}}</p>
+                    <button class="layui-btn like-btn {{active}}">
+                        <i class="layui-icon layui-icon-praise"></i> 点赞
+                    </button>
+                </div>
+                <div class="comment">
+                    <h3>Answer</h3>
+                    <div class="comment-list">
+                    </div>
+                    <form class="layui-form" lay-filter="comment-form">
+                        <div class="layui-form-item layui-form-text">
+                            <textarea name="comment" lay-verify="required" placeholder="请输入评论内容"
+                                class="layui-textarea"></textarea>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn" lay-submit lay-filter="submit-comment">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入Layui的JavaScript -->
+    <script src="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
+    <script>
+        var Userdata = { }
+        //获取当前的用户信息
+        fetch('/getuser')
+  .then(response => response.json())
+  .then(data => {
+    if(data.code==200){
+        Userdata=data
+        return ;
+    }
+  })
+  .catch(error => console.error('Error:', error));
+        
+        layui.use(['form', 'jquery', 'layer'], function () {
+            var form = layui.form;
+            var $ = layui.jquery;
+            var layer = layui.layer
+            var comments=Object;
+            fetch('/getcomment?article_id='+{{art.id}}).then(response => response.json()).then(data => {
+                    if(data.code=200){
+                       loadComments(data.data)
+                    }
+                })
+            function loadComments(comments) {
+                
+               
+                $('.comment-list').empty();
+                comments.forEach(function (comment, index) {
+                    var html = '<div class="comment-item">' +
+                        '<img class="avatar" src="' + comment.avatar + '">' +
+                        '<span class="user">' + comment.user + '</span>' +
+                        '<p class="content">' + comment.content + '</p>' +
+                        '</div>';
+                    var $commentItem = $(html);
+                    setTimeout(function () {
+                        $commentItem.addClass('show');
+                    }, 100 * index);
+                    $('.comment-list').append($commentItem);
+                });
+            }
+
+          
+
+            form.on('submit(submit-comment)', function (data) {
+                $.ajax({
+                    'url': '/comment/add',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ 'article_id': {{ art.id }}, 'content': data.field.comment}),
+                success: (res) => {
+                    if (res.code == 200) {
+                        layer.msg(res.message, { icon: 1 })
+                        setTimeout(() => {
+                            var commentContent = data.field.comment;
+                            var html = '<div class="comment-item show">' +
+                                '<img class="avatar" src="' + Userdata.photo + '">' +
+                                '<span class="user">' + Userdata.username + '</span>' +
+                                '<p class="content">' + commentContent + '</p>' +
+                                '</div>';
+                            var $commentItem = $(html).appendTo('.comment-list').hide().slideDown();
+
+                            // 清空评论输入框
+                            $('[name="comment"]').val('');
+                        }, 400)
+                        return false;
+
+                    }
+                    if(res.code==400){
+                        layer.msg(res.message,{icon:2})
+                        return false
+                    }
+                },
+                error:(e)=>{
+                        layer.alert('评论失败',{icon:2})
+                    }
+
+              })
+
+        return false; // 阻止表单默认提交
+          });
+
+        // 监听点赞按钮点击事件
+        $('.like-btn').click(function () {
+            $.ajax({
+                url:'/like',
+                method:'POST',
+               
+                data:JSON.stringify({articleid:{{art.id}}}),
+                contentType:'application/json',
+                success:(res)=>{
+                    if(res.code==200){
+                        $(this).toggleClass('active');
+                    }
+                },
+                error:(e)=>{
+                    layer.alert(JSON.stringify(e),{icon:2})
+                }
+            })
+            
+        });
+      });
+    </script>
+</body>
+
+</html>

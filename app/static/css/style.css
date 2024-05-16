@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #111;
+  width: 100%;
+  overflow: hidden;
+  background-color: #111;
+  /* background: radial-gradient(ellipse farthest-corner at center top, #f39264 0%, #f2606f 100%); */
+}
+.ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ring i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
+}
+.ring i:nth-child(1) {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  animation: animate 6s linear infinite;
+}
+.ring i:nth-child(2) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate 4s linear infinite;
+}
+.ring i:nth-child(3) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate2 10s linear infinite;
+}
+.ring:hover i {
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes animate2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.login {
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+.login h2 {
+  font-size: 2em;
+  color: #fff;
+}
+.login .inputBx {
+  position: relative;
+  width: 100%;
+}
+.login .inputBx input {
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  font-size: 1.2em;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+.login .inputBx input[type="submit"] {
+  width: 100%;
+  background: #0078ff;
+  background: linear-gradient(45deg, #ff357a, #fff172);
+  border: none;
+  cursor: pointer;
+}
+.login .inputBx input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+.login .links {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.login .links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* register page */
+
+.ring-large {
+  width: 500px; 
+  height: 550px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.like-btn {
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.like-btn i {
+  font-size: 20px;
+  color: #999;
+}
+
+.like-btn.active i {
+  color: #ff5722;
+}
+
+.comment-item {
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.comment-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.comment-item img {
+  vertical-align: middle;
+}
+
+.comment-item .user {
+  margin-left: 10px;
+}
+
+.comment-item .content {
+  margin-top: 5px;
+  margin-left: 60px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+.article h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.article p {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
