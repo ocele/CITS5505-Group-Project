@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+    
+    <h2>Requests Created by You</h2>
+    <ul>
+        {% for request in user.requests %}
+            <li><a href="{{ url_for('view_request', request_id=request.id) }}">{{ request.title }}</a></li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Requests You Have Answered</h2>
+    <ul>
+        {% for answer in user.answers %}
+            <li><a href="{{ url_for('view_request', request_id=answer.request_id) }}">{{ answer.request.title }}</a></li>
+        {% endfor %}
+    </ul>
+    
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('create_request') }}">Create Request</a>
+    <a href="{{ url_for('search_request') }}">Search Requests</a>
+</body>
+</html>
