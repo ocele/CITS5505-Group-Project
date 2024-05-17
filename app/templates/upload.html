@@ -19,7 +19,7 @@
             <label for="content" class="form-label">Content:</label>
             <textarea class="form-control" id="content" name="content" required></textarea>
         </div>
-       
+
         <button type="button" class="btn btn-primary" id="submit">Submit</button>
     </form>
   </div>
@@ -39,7 +39,7 @@
         contentType:'application/json',
         success:function(data){
             if(data.code==200){
-                alert("上传成功");
+                alert("Upload Successful!");
                 return ;
             }
             alert(data.message)

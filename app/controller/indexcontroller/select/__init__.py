@@ -9,7 +9,6 @@ def articlesort():
         if not (value==1 or value==0):
             return jsonify({'code':400,'msg':'参数错误'})
         if value==1:
-            # 从大到小排序（降序）
             articlesdata = Article.query.order_by(desc(Article.create_time)).all()
         else:
             articlesdata = Article.query.order_by(asc(Article.create_time)).all()
