@@ -15,7 +15,7 @@ def upload_blog():
         content=data['content']
         title=data['title']
     except KeyError:
-        return jsonify(code=400,message='参数错误')
+        return jsonify(code=400,message='Parameter Error')
 
     db.session.add(Article(title=title,content=content,userid=userid))
     db.session.commit()
