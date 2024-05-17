@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="en">
 
@@ -201,4 +202,217 @@
 </script>
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tasks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/article_style.css" />
+    <title>Homepage</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.6.8/css/layui.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- Navbar part -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CoinQuest</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+                aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+             aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if session.username %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Hello, {{ session.username }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/userinfo">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item nav_login">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5 pt-5">
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <div class="article">
+                    <h1>{{ art.title }}</h1>
+                    <div class="article-info">
+                        <img class="avatar" src="{{ url_for('static',filename="photo/"+userdata.photopath) }}">
+                        <span class="author">Author:{{ userdata.username }}</span>
+                        <span class="time">Upload time:{{ art.create_time }}</span>
+                    </div>
+                    <p>{{ art.content }}</p>
+                    <!-- <button class="layui-btn like-btn {{ active }}">
+                        <i class="layui-icon layui-icon-praise"></i> Like
+                    </button> -->
+                </div>
+                <div class="comment">
+                    <h3>Answer</h3>
+                    <div class="comment-list">
+                    </div>
+                    <form class="layui-form" lay-filter="comment-form">
+                        <div class="layui-form-item layui-form-text">
+                            <textarea name="comment" lay-verify="required" placeholder="Please Enter Your Answer"
+                                      class="layui-textarea"></textarea>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn" lay-submit lay-filter="submit-comment">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
+<script>
+    var Userdata = {}
+    fetch('/getuser')
+        .then(response => response.json())
+        .then(data => {
+            if (data.code == 200) {
+                Userdata = data
+                return;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+
+    layui.use(['form', 'jquery', 'layer'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer
+        var comments = Object;
+        fetch('/getcomment?article_id=' +{{art.id}}).then(response => response.json()).then(data => {
+            if (data.code = 200) {
+                loadComments(data.data)
+            }
+        })
+
+        function loadComments(comments) {
+
+            $('.comment-list').empty();
+            comments.forEach(function (comment, index) {
+                var html = '<div class="comment-item">' +
+                    '<img class="avatar" src="' + comment.avatar + '">' +
+                    '<span class="user">' + comment.user + '</span>' +
+                    '<p class="content">' + comment.content + '</p>' +
+                    '</div>';
+                var $commentItem = $(html);
+                setTimeout(function () {
+                    $commentItem.addClass('show');
+                }, 100 * index);
+                $('.comment-list').append($commentItem);
+            });
+        }
+
+        form.verify({
+            required: function(value, item) {
+                if (!value) {
+                    return 'Can Not Submit Empty Answer';
+                }
+            }
+            });
+            
+        form.on('submit(submit-comment)', function (data) {
+            console.log(111111)
+
+
+            $.ajax({
+                'url': '/comment/add',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({'article_id': {{ art.id }}, 'content': data.field.comment}),
+                success: (res) => {
+                    if (!res.code | !res.code) {
+                        layer.msg('Please login', {
+                            icon: 2,
+                            time: 2000 
+                        });
+                        return false
+                    }
+                    if (res.code == 200) {
+                        console.log(res)
+                        layer.msg(res.message, {icon: 1})
+                        setTimeout(() => {
+                            var commentContent = data.field.comment;
+                            var html = '<div class="comment-item show">' +
+                                '<img class="avatar" src="' + Userdata.photo + '">' +
+                                '<span class="user">' + Userdata.username + '</span>' +
+                                '<p class="content">' + commentContent + '</p>' +
+                                '</div>';
+                            var $commentItem = $(html).appendTo('.comment-list').hide().slideDown();
+
+                            $('[name="comment"]').val('');
+                        }, 400)
+                        return false;
+
+                    }
+                    if (res.code == 400) {
+                        layer.msg(res.message, {icon: 2})
+                        return false
+                    }
+                },
+                error: (e) => {
+                    layer.msg('Please login', {
+                        icon: 2,
+                        time: 2000
+                    });
+                }
+
+            })
+
+            return false;
+        });
+
+    });
+</script>
+<footer class="w-100 footer bg-dark text-white py-4 mt-5 fixed-bottom">
+    <div class="container">
+        <div class="text-center mt-4">
+            © 2024 CITS5505 All rights reserved.
+        </div>
+    </div>
+</footer>
+</body>
+
+>>>>>>> Stashed changes
 </html>

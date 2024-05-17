@@ -100,7 +100,11 @@
                     if (data.code == 400) {
 
                         let layer = layui.layer
-                        layer.alert(data.message, {icon: 2})
+                        layer.msg(data.message, {
+                            icon: 2,
+                            time: 2000
+                        
+                        })
                     } else {
                         layer.msg('Login Successful!', {icon: 1, time: 800})
 

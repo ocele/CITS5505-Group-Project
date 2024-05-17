@@ -1,3 +1,4 @@
+/* Existing styles */
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 * {
   margin: 0;
@@ -118,6 +119,22 @@ body {
 /* register page */
 
 .ring-large {
-  width: 500px; 
-  height: 550px;
+  width: 550px; 
+  height: 650px;
 }
+
+/* .password-toggle-btn {
+  border: none;
+  background: transparent;
+  color: white; 
+  cursor: pointer;
+}
+.password-toggle-btn:hover {
+  color: lightgray; 
+}
+.login {
+  z-index: 10; 
+}
+.ring {
+  z-index: 1; 
+} */
