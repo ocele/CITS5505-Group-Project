@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//unpkg.com/layui@2.9.9/dist/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//unpkg.com/layui@2.9.9/dist/layui.js"></script>
+</head>
+<body class="p-3 m-0 border-0 bd-example">
+<!-- Navbar part -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CoinQuest</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+             aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
+                    </li>
+
+
+
+                    {% if session.username %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/userinfo">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item nav_login">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <div class="row w-75 m-auto">
+        <div class="col-md-12">
+            <div class="card">
+                <form>
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4" style="font-size: 35px;">Account Information</h1>
+                        <div class="text-center mb-4">
+                            <img src="{{ url_for('static',filename="photo/"+data.photopath) }}" width="80" height="80"
+                                 style="border: 3px solid #f2706b;border-radius: 100%;" alt=""/>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="mb-3">
+                                <label for="rewards" class="form-label fw-bold">rewards</label>
+                                <input type="text" class="form-control" id="rewards" readonly disabled="disabled"
+                                       value="{{ data.money }}">
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold">username</label>
+                            <input type="text" class="form-control" id="username" value="{{ data.username }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-bold">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   value="{{ data.password }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label fw-bold">Profile Image</label>
+                            <input type="file" class="form-control" id="profileImage">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="requestajx()">Save Changes</button>
+                    </div>
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function requestajx() {
+        let form = new FormData()
+        let password = $('#password').val()
+        let file = document.querySelector('input[type="file"]').files[0]
+        if (password == '' && file == undefined) {
+            return layer.msg('请输入更新的内容', {icon: 2, time: 100})
+        }
+        if (file != undefined) {
+            form.append('file', file)
+        }
+        if (password != '') {
+            form.append('password', password)
+        }
+        console.log(form);
+        $.ajax({
+            url: '/userinfo',
+            method: 'POST',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                if (res.code == 200) {
+                    layer.msg('修改成功', {icon: 1, time: 1000})
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000);
+                    return;
+                }
+            },
+            error: (e) => {
+                layer.alert(JSON.stringify(e), {icon: 2})
+            }
+        })
+    }
+</script>
+</body>
+</html>

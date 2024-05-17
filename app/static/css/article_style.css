@@ -1,0 +1,137 @@
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, blockquote, figure, figcaption, pre, table, th, td, form, fieldset, legend {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set the font for the body */
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+/* Style the container */
+.layui-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the article title */
+.article h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Style the article info */
+.article-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.article-info .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.article-info .author, .article-info .time {
+  font-size: 0.9em;
+  color: #666;
+  margin-right: 10px;
+}
+
+/* Style the article content */
+.article p {
+  font-size: 1.1em;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* Style the like button */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #009688;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.like-btn:hover {
+  background-color: #00796b;
+}
+
+.like-btn.active {
+  background-color: #00796b;
+}
+
+/* Style the comment section */
+.comment {
+  margin-top: 40px;
+}
+
+.comment h3 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.comment-list .comment-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.comment-list .comment-item .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-list .comment-item .user {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.comment-list .comment-item .content {
+  flex: 1;
+}
+
+/* Style the comment form */
+.layui-form-text textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.layui-form-item .layui-btn {
+  background-color: #009688;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.layui-form-item .layui-btn:hover {
+  background-color: #00796b;
+}
