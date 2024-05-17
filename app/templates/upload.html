@@ -19,38 +19,38 @@
             <label for="content" class="form-label">Content:</label>
             <textarea class="form-control" id="content" name="content" required></textarea>
         </div>
-        <div class="mb-3">
-            <label for="deadline" class="form-label">Deadline:</label>
-            <input type="date" class="form-control" id="deadline" name="deadline" required>
-        </div>
-        <div class="mb-3">
-            <label for="rewards" class="form-label">Rewards:</label>
-            <input type="number" class="form-control" id="rewards" name="rewards" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <button type="button" class="btn btn-primary" id="submit">Submit</button>
     </form>
   </div>
-  <!-- <div class="container mt-5 pt-5">
-    <h2 class="mt-3 mb-3 text-center fw-bold" style="font-size: 30px;">Submit Your Task</h2>
-    <form action="/upload.html" method="POST">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">Content:</label>
-            <textarea class="form-control" id="content" name="content" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="deadline" class="form-label">Deadline:</label>
-            <input type="date" class="form-control" id="deadline" name="deadline" required>
-        </div>
-        <div class="mb-3">
-            <label for="rewards" class="form-label">Rewards:</label>
-            <input type="number" class="form-control" id="rewards" name="rewards" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div> -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script>
+    document.querySelector('#submit').addEventListener('click', function() {
+      let title=document.querySelector('#title').value;
+      let content=document.querySelector('#content').value;
+      if (title=='' ||content==''){
+        alert("Title and Content Can't Be Empty");
+        return false;
+      }
+      $.ajax({
+        url:"/blogupload",
+        method:"POST",
+        data:JSON.stringify({title:title,content:content}),
+        contentType:'application/json',
+        success:function(data){
+            if(data.code==200){
+                alert("Upload Successful!");
+                return ;
+            }
+            alert(data.message)
+
+        },
+        error:(e)=>{
+            alert(JSON.stringify(e))
+        }
+      })
+
+    })
+  </script>
 </body>
 </html>
