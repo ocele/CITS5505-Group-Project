@@ -36,8 +36,8 @@ def upuser():
         db.session.commit()
         passwordbool=True
     if passwordbool or filebool:
-        return jsonify(code=200,message='更改成功')
-    return jsonify(code=400,message='无效请求')
+        return jsonify(code=200,message='Submited')
+    return jsonify(code=400,message='Error Submitting')
         
 @userinfo.route('/getuser',methods=['GET'])
 def getuser():

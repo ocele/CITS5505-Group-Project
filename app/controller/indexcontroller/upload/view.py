@@ -21,4 +21,4 @@ def upload_blog():
     db.session.commit()
     user.money=user.money+1
     db.session.commit()
-    return jsonify(code=200,message='上传成功,获得1积分!')
+    return jsonify(code=200,message='Upload Successful! +1')
