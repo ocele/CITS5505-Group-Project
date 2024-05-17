@@ -1,0 +1,25 @@
+.custom-background {
+    background: linear-gradient(0deg, #f39264 0%, #f2908f 100%);
+}
+
+
+.my-card {
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #f39264 0%, #f2908f 100%;
+}
+
+.card-title {
+    font-size: 20px;
+    color: #1E9FFF;
+}
+
+.card-text {
+    color: #666;
+}
+
+.timestamp {
+    color: #999;
+}
+
