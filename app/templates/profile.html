@@ -30,6 +30,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
                     </li>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
                     </li>
@@ -146,7 +150,7 @@
         let password = $('#password').val()
         let file = document.querySelector('input[type="file"]').files[0]
         if (password == '' && file == undefined) {
-            return layer.msg('请输入更新的内容', {icon: 2, time: 100})
+            return layer.msg('Please Enter', {icon: 2, time: 100})
         }
         if (file != undefined) {
             form.append('file', file)
@@ -163,7 +167,7 @@
             contentType: false,
             success: (res) => {
                 if (res.code == 200) {
-                    layer.msg('修改成功', {icon: 1, time: 1000})
+                    layer.msg('Change Saved', {icon: 1, time: 1000})
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000);

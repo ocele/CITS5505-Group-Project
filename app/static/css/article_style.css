@@ -1,3 +1,4 @@
+/* Reset some default browser styles */
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, blockquote, figure, figcaption, pre, table, th, td, form, fieldset, legend {
   margin: 0;
   padding: 0;
@@ -9,9 +10,10 @@ body {
   font-family: 'Roboto', sans-serif;
   line-height: 1.6;
   color: #333;
-  background-color: #f4f4f4;
+  background: linear-gradient(to bottom, #f2908f 0%, #f39264 100%);
   padding: 20px;
 }
+
 
 /* Style the container */
 .layui-container {
@@ -57,27 +59,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Style the like button */
-.like-btn {
-  display: inline-flex;
-  align-items: center;
-  background-color: #009688;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.like-btn:hover {
-  background-color: #00796b;
-}
-
-.like-btn.active {
-  background-color: #00796b;
-}
-
 /* Style the comment section */
 .comment {
   margin-top: 40px;
@@ -93,7 +74,6 @@ body {
   align-items: flex-start;
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
-  transition: all 0.3s ease;
 }
 
 .comment-list .comment-item .avatar {
@@ -135,3 +115,4 @@ body {
 .layui-form-item .layui-btn:hover {
   background-color: #00796b;
 }
+
