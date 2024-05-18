@@ -30,9 +30,6 @@
                         aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-<<<<<<< Updated upstream
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-=======
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
@@ -42,7 +39,6 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
->>>>>>> Stashed changes
                     {% if session.username %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">Hello, {{ session.username }}</a>
@@ -56,9 +52,6 @@
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
@@ -166,21 +159,11 @@
             return false;
         });
 
-<<<<<<< Updated upstream
-
-            },
-            error: (e) => {
-                alert('Order Error')
-            }
-        })
-    })
-=======
         $('#sort').on('change', function () {
             $('#sortOrder').val($(this).val());
             $('#searchForm').submit();
         });
     });
->>>>>>> Stashed changes
 </script>
 
 </body>

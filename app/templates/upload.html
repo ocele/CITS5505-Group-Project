@@ -26,33 +26,6 @@
 
         <button type="button" class="btn btn-primary" id="submit">Submit</button>
     </form>
-<<<<<<< Updated upstream
-  </div>
-  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-  <script>
-    document.querySelector('#submit').addEventListener('click', function() {
-      let title=document.querySelector('#title').value;
-      let content=document.querySelector('#content').value;
-      if (title=='' ||content==''){
-        alert("Title and Content Can't Be Empty");
-        return false;
-      }
-      $.ajax({
-        url:"/blogupload",
-        method:"POST",
-        data:JSON.stringify({title:title,content:content}),
-        contentType:'application/json',
-        success:function(data){
-            if(data.code==200){
-                alert("Upload Successful!");
-                return ;
-            }
-            alert(data.message)
-
-        },
-        error:(e)=>{
-            alert(JSON.stringify(e))
-=======
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
@@ -62,7 +35,6 @@
         if (title == '' || content == '') {
             alert("Title and Content Can Not Be Empty");
             return false;
->>>>>>> Stashed changes
         }
         $.ajax({
             url: "/blogupload",
