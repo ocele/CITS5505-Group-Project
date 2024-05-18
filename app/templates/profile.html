@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<<<<<<< HEAD
     <link rel="stylesheet" href="../static/css/profile.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -15,6 +16,20 @@
         <a class="navbar-brand" href="./">CoinQuest</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+=======
+    <link href="//unpkg.com/layui@2.9.9/dist/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/profile.css">
+    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//unpkg.com/layui@2.9.9/dist/layui.js"></script>
+</head>
+<body class="p-3 m-0 border-0 bd-example custom-background mt-5">
+<!-- Navbar part -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/index">CoinQuest</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+                aria-controls="offcanvasDarkNavbar">
+>>>>>>> 7e7e438 (Adjust templates)
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
@@ -54,6 +69,7 @@
         </div>
     </div>
 </nav>
+
 <div class="container mt-5">
     <div class="row ">
         <div class="col-md-5">
@@ -135,6 +151,7 @@
     <hr>
 </div>
 
+<<<<<<< HEAD
 <script>
     function requestajx() {
         let form = new FormData();
@@ -149,6 +166,22 @@
         }
         if (password !== '') {
             form.append('password', password);
+=======
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function requestajx() {
+        let form = new FormData()
+        let password = $('#password').val()
+        let file = document.querySelector('input[type="file"]').files[0]
+        if (password == '' && file == undefined) {
+            return layer.msg('Please Enter', {icon: 2, time: 100})
+        }
+        if (file != undefined) {
+            form.append('file', file)
+        }
+        if (password != '') {
+            form.append('password', password)
+>>>>>>> 7e7e438 (Adjust templates)
         }
         console.log(form);
         $.ajax({
@@ -158,18 +191,31 @@
             processData: false,
             contentType: false,
             success: (res) => {
+<<<<<<< HEAD
                 if (res.code === 200) {
                     alert('Change Saved');
                     setTimeout(() => {
                         window.location.reload();
+=======
+                if (res.code == 200) {
+                    layer.msg('Change Saved', {icon: 1, time: 1000})
+                    setTimeout(() => {
+                        window.location.reload()
+>>>>>>> 7e7e438 (Adjust templates)
                     }, 1000);
                     return;
                 }
             },
             error: (e) => {
+<<<<<<< HEAD
                 alert('Error: ' + JSON.stringify(e));
             }
         });
+=======
+                layer.alert(JSON.stringify(e), {icon: 2})
+            }
+        })
+>>>>>>> 7e7e438 (Adjust templates)
     }
 </script>
 </body>
