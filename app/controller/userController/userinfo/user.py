@@ -1,50 +1,3 @@
-<<<<<<< Updated upstream
-from app.controller.userController.blueprint import userinfo
-from flask import render_template,session,redirect,request,jsonify,current_app,g
-from model.database.db import User,db
-import time,os
-@userinfo.route('/userinfo', methods=['GET'])
-def get_userinfo():
-    username=session.get('username')
-    if username is None:
-        session.clear()
-        return redirect('/login')
-    user=User.query.filter_by(username=username).first()
-    if user is None:
-        session.clear()
-        return redirect('/login')
-    return render_template('profile.html',data=user)
-@userinfo.route('/userinfo',methods=['POST'])
-def upuser():
-    username=session.get('username')
-    filebool=False
-    passwordbool=False
-    password=request.form.get('password')
-    file=request.files.get('file')
-    user=User.query.filter_by(username=username).first()
-    if file is not None:
-        filebool=True
-       
-        filename=str(time.time())+'.png'
-        path=os.path.join(current_app.config['photopath'],filename)
-        file.save(path)
-        if user.photopath!='default.png':
-           os.remove(os.path.join(current_app.config['photopath'],user.photopath))
-        user.photopath=filename
-        db.session.commit()
-    if password is not None:
-        user.password=password
-        db.session.commit()
-        passwordbool=True
-    if passwordbool or filebool:
-        return jsonify(code=200,message='Submited')
-    return jsonify(code=400,message='Error Submitting')
-        
-@userinfo.route('/getuser',methods=['GET'])
-def getuser():
-    userObject=g.get('userObject')
-    return jsonify({'username':userObject.username,'photo':'/static/photo/'+userObject.photopath,'code':200})
-=======
 from app.controller.userController.blueprint import userinfo
 from flask import render_template, session, redirect, request, jsonify, current_app, g
 from model.database.db import User, db, Article, Comment
@@ -80,10 +33,8 @@ def get_userinfo():
 def get_articles_with_comments_from_user(user_id):
     user_comments = Comment.query.filter_by(userid=user_id).all()
 
-    # 获取这些评论相关的文章
     articles = [comment.article for comment in user_comments]
 
-    # 对文章列表进行去重处理
     distinct_articles = list(set(articles))
 
     return distinct_articles
@@ -120,4 +71,3 @@ def upuser():
 def getuser():
     userObject = g.get('userObject')
     return jsonify({'username': userObject.username, 'photo': '/static/photo/' + userObject.photopath, 'code': 200})
->>>>>>> Stashed changes
