@@ -1,7 +1,11 @@
+import os
+
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
-from flask_login import logout_user, login_required
+from flask_login import logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
+
 from .forms import RegistrationForm, LoginForm
-from model.database.db import db, User, Article
+from model.database.db import db, User, Article, Comment
 from sqlalchemy.exc import IntegrityError
 from flask import flash
 import time
@@ -9,6 +13,7 @@ from functools import wraps
 
 main = Blueprint('main', __name__)
 auth = Blueprint('auth', __name__)
+
 
 def my_login_required(func):
     @wraps(func)
@@ -19,10 +24,12 @@ def my_login_required(func):
 
     return wrapper
 
+
 @main.route('/')
 def index():
-    users = User.query.order_by(User.money.desc()).all()  
+    users = User.query.order_by(User.money.desc()).all()
     return render_template('leaderboard.html', users=users)
+
 
 @main.route('/index')
 def index_page():
@@ -34,22 +41,26 @@ def index_page():
         )
     return render_template('index.html', tasks=tasks)
 
+
 @main.route('/login')
 def main_login():
     type = request.args.get('type', default=1, type=int)
     return render_template('login.html', type=type)
 
+
 @main.route('/profile')
 def profile():
     if 'username' in session:
         username = session['username']
-        return render_template('profile.html', username=username)
+        return render_template('profile.html', username=current_user.username)
     else:
         return redirect(url_for('main_login'))
+
 
 @main.route('/forgot_password')
 def forgot_password():
     return render_template('password.html')
+
 
 @auth.route('/register', methods=['GET', 'POST'])
 def app_register():
@@ -80,6 +91,7 @@ def app_register():
     else:
         return render_template('register.html')
 
+
 @main.route('/logout')
 def logout():
     session.pop('username', None)
@@ -87,6 +99,7 @@ def logout():
     session.pop('timestamp', None)
     logout_user()
     return redirect(url_for('main.index'))
+
 
 @main.route('/search', methods=['POST'])
 def search():
@@ -110,9 +123,30 @@ def search():
 
     return render_template('index.html', tasks=results, word=keyword)
 
+
+def get_articles_with_comments_from_user(user_id):
+    user_comments = Comment.query.filter_by(userid=user_id).all()
+
+    # 获取这些评论相关的文章
+    articles = [comment.article for comment in user_comments]
+
+    # 对文章列表进行去重处理
+    distinct_articles = list(set(articles))
+
+    return distinct_articles
+
+
 @main.route('/userinfo', methods=['GET', 'POST'])
 @my_login_required
 def userinfo():
+    username = session.get('username')
+    if username is None:
+        session.clear()
+        return redirect('/login')
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        session.clear()
+        return redirect('/login')
     if request.method == 'POST':
         password = request.form.get('password')
         file = request.files.get('file')
@@ -121,11 +155,28 @@ def userinfo():
             user.password = password
         if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            user.profile_image = filename
+            file.save(os.path.join('app/static/photo', filename))
+            print(filename)
+            user.photopath = filename
         db.session.commit()
+
         return jsonify({'code': 200, 'message': 'Update successful'})
-    return render_template('profile.html', data=current_user)
+    else:
+        tasks = []
+        userid = session.get('userid')
+        articledata = Article.query.filter_by(userid=userid).all()
+        answers_articles = get_articles_with_comments_from_user(userid)
+        answers = []
+        for i in articledata:
+            tasks.append(
+                {'id': i.id, 'title': i.title, 'content': i.content, 'time': i.create_time.strftime("%Y-%m-%d %H:%M"),
+                 'user': i.user.username})
+        for i in answers_articles:
+            answers.append(
+                {'id': i.id, 'title': i.title, 'content': i.content, 'time': i.create_time.strftime("%Y-%m-%d %H:%M"),
+                 'user': i.user.username})
+        return render_template('profile.html', data=user, tasks=tasks, answers=answers)
+
 
 @main.route('/add', methods=['POST'])
 @my_login_required

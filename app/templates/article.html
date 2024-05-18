@@ -1,169 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Tasks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/article_style.css" />
-    <title>Homepage</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
-</head>
-<body>
-<!-- Navbar part -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">CoinQuest</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
-                aria-controls="offcanvasDarkNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
-             aria-labelledby="offcanvasDarkNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    {% if session.username %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hello, {{ session.username }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/userinfo">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item nav_login">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+{% extends "base.html" %}
 
-<div class="container mt-5 pt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="article">
-                    <h1>{{ art.title }}</h1>
-                    <div class="article-info">
-                        <img class="avatar" src="{{ url_for('static',filename="photo/"+userdata.photopath) }}">
-                        <span class="author">Author: {{ userdata.username }}</span>
-                        <span class="time">Upload time: {{ art.create_time }}</span>
+{% block title %}{{ art.title }}{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/css/article_style.css"/>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="container mt-5 pt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- Article Card -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="article">
+                                    <h1>{{ art.title }}</h1>
+                                    <div class="article-info mb-3">
+                                        <img class="avatar"
+                                             src="{{ url_for('static',filename='photo/' + userdata.photopath) }}"
+                                             alt="Author's photo" class="img-thumbnail"
+                                             style="width: 50px; height: 50px;">
+                                        <span class="author ms-2">Author: {{ userdata.username }}</span>
+                                        <span class="time ms-2">Upload time: {{ art.createtime }}</span>
+                                    </div>
+                                    <p>{{ art.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="comment">
+                                    <h3>Answer</h3>
+                                    <div class="comment-list mb-3"></div>
+                                    <form id="commentForm">
+                                        <div class="mb-3">
+                                    <textarea name="comment" class="form-control" placeholder="Please Enter Your Answer"
+                                              required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <input type="hidden" id="articleId" value="{{ art.id }}">
+                            </div>
+                        </div>
                     </div>
-                    <p>{{ art.content }}</p>
                 </div>
-                <div class="comment">
-                    <h3>Answer</h3>
-                    <div class="comment-list"></div>
-                    <form id="commentForm">
-                        <div class="mb-3">
-                            <textarea name="comment" class="form-control" placeholder="Please Enter Your Answer" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <input type="hidden" id="articleId" value="{{ art.id }}">
             </div>
         </div>
     </div>
-</div>
+{% endblock %}
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    var Userdata = {};
-    fetch('/getuser')
-        .then(response => response.json())
-        .then(data => {
-            if (data.code === 200) {
-                Userdata = data;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-
-    $(document).ready(function() {
-        var articleId = $('#articleId').val();
-        fetch('/getcomment?article_id=' + articleId)
+{% block script %}
+    <script>
+        var Userdata = {};
+        fetch('/getuser')
             .then(response => response.json())
             .then(data => {
                 if (data.code === 200) {
-                    loadComments(data.data);
+                    Userdata = data;
                 }
-            });
+            })
+            .catch(error => console.error('Error:', error));
 
-        function loadComments(comments) {
-            $('.comment-list').empty();
-            comments.forEach(function(comment, index) {
-                var html = '<div class="comment-item">' +
-                    '<img class="avatar" src="' + comment.avatar + '">' +
-                    '<span class="user">' + comment.user + '</span>' +
-                    '<p class="content">' + comment.content + '</p>' +
-                    '</div>';
-                var $commentItem = $(html);
-                setTimeout(function() {
-                    $commentItem.addClass('show');
-                }, 100 * index);
-                $('.comment-list').append($commentItem);
-            });
-        }
-
-        $('#commentForm').submit(function(event) {
-            event.preventDefault();
-            var formData = {
-                article_id: articleId,
-                content: $('textarea[name="comment"]').val()
-            };
-
-            $.ajax({
-                url: '/comment/add',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function(res) {
-                    if (res.code === 200) {
-                        alert('Submited');
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1000);
-                    } else {
-                        alert(res.message);
+        $(document).ready(function () {
+            var articleId = $('#articleId').val();
+            fetch('/getcomment?article_id=' + articleId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        loadComments(data.data);
                     }
-                },
-                error: function(e) {
-                    alert('Please login');
-                }
+                });
+
+            function loadComments(comments) {
+                $('.comment-list').empty();
+                comments.forEach(function (comment, index) {
+                    var html = '<div class="comment-item">' +
+                        '<img class="avatar" src="' + comment.avatar + '">' +
+                        '<span class="user">' + comment.user + '</span>' +
+                        '<p class="content">' + comment.content + '</p>' +
+                        '</div>';
+                    var $commentItem = $(html);
+                    setTimeout(function () {
+                        $commentItem.addClass('show');
+                    }, 100 * index);
+                    $('.comment-list').append($commentItem);
+                });
+            }
+
+            $('#commentForm').submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    article_id: articleId,
+                    content: $('textarea[name="comment"]').val()
+                };
+
+                $.ajax({
+                    url: '/comment/add',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (res) {
+                        if (res.code === 200) {
+
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            alert(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        alert('Please login');
+                    }
+                });
             });
         });
-    });
-</script>
-
-<div style="height: 100px;"></div>
-<footer class="w-100 footer bg-dark text-white py-4 mt-5 fixed-bottom">
-    <div class="container">
-        <div class="text-center mt-4">
-            © 2024 CITS5505 All rights reserved.
-        </div>
-    </div>
-</footer>
-</body>
-</html>
+    </script>
+{% endblock %}

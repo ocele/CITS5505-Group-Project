@@ -11,6 +11,7 @@ def get_article():
     if id is None:
         return jsonify(code=400, message='Page Not Exist'), 404
     art = Article.query.filter_by(id=id).first()
+    art.createtime = art.create_time.strftime('%Y-%m-%d %H:%M:%S')
     if art is None:
         return jsonify(code=400, message='Page Not Exist'), 404
     username = session.get('username')

@@ -1,166 +1,104 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/css/mainpagestyle.css">
-    <title>Homepage</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-<!-- Navbar part -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">CoinQuest</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
-                aria-controls="offcanvasDarkNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
-             aria-labelledby="offcanvasDarkNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    {% if session.username %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Hello, {{ session.username }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/userinfo">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item nav_login">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-5 pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="input-group mb-3">
-                <form id="searchForm" action="/search" method="POST" style="display: flex; width: 100%;">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search..." aria-label="Search"
-                           aria-describedby="button-addon2" name="keyword" value="{{ word }}">
-                    <input type="hidden" id="sortOrder" name="sortOrder" value="date-newest">
-                    <button class="btn btn-outline-secondary" type="submit" id="searchButton">Search</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Sort BY -->
-<div class="container mt-4">
-    <div class="d-flex" style="justify-content: space-between;">
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-primary upload_button">Upload Your Task</button>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="me-2">
-                <label for="sortSelect" class="form-label">Sort by:</label>
-            </div>
-            <select class="form-select" id="sort" aria-label="Task Sort" style="width: auto;">
-                <option value="date-newest">Latest Uploads</option>
-                <option value="date-oldest">Oldest Uploads</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Tab Category -->
-    <ul class="nav nav-tabs mt-4">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#coding" data-bs-toggle="tab">Coding</a>
-        </li>
-    </ul>
-    
-    <!-- Tab card content (User Uploads) -->
-    <div class="tab-content">
-        <div class="tab-pane fade show active" id="coding">
-            {% for task in tasks %}
-                <div class="card mt-3">
-                    <div class="card-body" style="width: 300px;">
-                        <h5 class="card-title">Title: {{ task.title }}</h5>
-                        <p class="card-text"><strong>Content:</strong> {{ task.content }}</p>
-                        <p class="card-text"><strong>timestamp:</strong> {{ task.time }}</p>
-                        <button class="btn btn-success mt-4" data-bs-toggle="modal"
-                                onclick="geturl('./article?id={{ task.id }}')">
-                            Answer Question
-                        </button>
-                    </div>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-5 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <form id="searchForm" action="/search" method="POST" style="display: flex; width: 100%;">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search..."
+                               aria-label="Search"
+                               aria-describedby="button-addon2" name="keyword" value="{{ word }}">
+                        <input type="hidden" id="sortOrder" name="sortOrder" value="date-newest">
+                        <button class="btn btn-outline-secondary" type="submit" id="searchButton">Search</button>
+                    </form>
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 
-<div style="height: 100px;"></div>
-
-<button id="back-to-top" class="btn btn-secondary">↑ Top</button>
-
-<!-- footer -->
-<footer class="w-100 footer bg-dark text-white py-4 mt-5">
-    <div class="container">
-        <div class="text-center mt-4">
-            © 2024 CITS5505 All rights reserved.
+    <!-- Sort BY -->
+    <div class="container mt-4">
+        <div class="d-flex" style="justify-content: space-between;">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary upload_button">Upload Your Task</button>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="me-2">
+                    <label for="sortSelect" class="form-label">Sort by:</label>
+                </div>
+                <select class="form-select" id="sort" aria-label="Task Sort" style="width: auto;">
+                    <option value="date-newest">Latest Uploads</option>
+                    <option value="date-oldest">Oldest Uploads</option>
+                </select>
+            </div>
         </div>
+
+        <!-- Tab Category -->
+        <ul class="nav nav-tabs mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#coding" data-bs-toggle="tab">Coding</a>
+            </li>
+        </ul>
+
+        <!-- Tab card content (User Uploads) -->
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="coding">
+                {% for task in tasks %}
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <a>Title: {{ task.title }}</a>
+                            <p class="card-text"><strong>Content:</strong> {{ task.content }}</p>
+                            <p class="card-text"><strong>Timestamp:</strong> {{ task.time }}</p>
+                            <button class="btn btn-success mt-4" data-bs-toggle="modal"
+                                    onclick="geturl('./article?id={{ task.id }}')">
+                                Answer Question
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
-</footer>
+    <div style="height: 100px;"></div>
 
-<script>
-    function geturl(url) {
-        window.location.href = url;
-    }
+    <button id="back-to-top" class="btn btn-secondary">↑ Top</button>
 
-    $(document).ready(function () {
-        // Back to top
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 100) {
-                $('#back-to-top').fadeIn();
-            } else {
-                $('#back-to-top').fadeOut();
-            }
-        });
+{% endblock %}
 
-        $('#back-to-top').click(function () {
-            $('html, body').animate({scrollTop: 0}, 800);
-            return false;
-        });
+{% block script %}
+    <script>
+        function geturl(url) {
+            window.location.href = url;
+        }
 
-        $('#sort').on('change', function () {
-            $('#sortOrder').val($(this).val());
-            $('#searchForm').submit();
-        });
+        $(document).ready(function () {
+            // Back to top
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+                    $('#back-to-top').fadeIn();
+                } else {
+                    $('#back-to-top').fadeOut();
+                }
+            });
 
-        $(".upload_button").click(function () {
-            $.ajax({
-                url: './upload.html?type=1',
-                method: 'GET',
-                success: function (data) {
-                    if (data.code === 200 || !data.code) {
-                        let modalHtml = `
+            $('#back-to-top').click(function () {
+                $('html, body').animate({scrollTop: 0}, 800);
+                return false;
+            });
+
+            $('#sort').on('change', function () {
+                $('#sortOrder').val($(this).val());
+                $('#searchForm').submit();
+            });
+
+            $(".upload_button").click(function () {
+                $.ajax({
+                    url: './upload.html?type=1',
+                    method: 'GET',
+                    success: function (data) {
+                        if (data.code === 200 || !data.code) {
+                            let modalHtml = `
                             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -174,19 +112,17 @@
                                     </div>
                                 </div>
                             </div>`;
-                        $('body').append(modalHtml);
-                        $('#uploadModal').modal('show');
-                    } else {
-                        alert('Please log in first');
+                            $('body').append(modalHtml);
+                            $('#uploadModal').modal('show');
+                        } else {
+                            alert('Please log in first');
+                        }
+                    },
+                    error: function () {
+                        alert('Please log in first.');
                     }
-                },
-                error: function () {
-                    alert('Please log in first.');
-                }
+                });
             });
         });
-    });
-</script>
-
-</body>
-</html>
+    </script>
+{% endblock %}
