@@ -21,7 +21,7 @@ def my_login_required(func):
 
 @main.route('/')
 def index():
-    users = User.query.order_by(User.money.desc()).all()  # Replace with actual data retrieval logic
+    users = User.query.order_by(User.money.desc()).all()  
     return render_template('leaderboard.html', users=users)
 
 @main.route('/index')
@@ -110,3 +110,30 @@ def search():
 
     return render_template('index.html', tasks=results, word=keyword)
 
+@main.route('/userinfo', methods=['GET', 'POST'])
+@my_login_required
+def userinfo():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        file = request.files.get('file')
+        user = User.query.get(session['userid'])
+        if password:
+            user.password = password
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            user.profile_image = filename
+        db.session.commit()
+        return jsonify({'code': 200, 'message': 'Update successful'})
+    return render_template('profile.html', data=current_user)
+
+@main.route('/add', methods=['POST'])
+@my_login_required
+def add_task():
+    data = request.get_json()
+    title = data.get('title')
+    content = data.get('content')
+    task = Article(title=title, content=content, userid=session['userid'])
+    db.session.add(task)
+    db.session.commit()
+    return jsonify({'code': 200, 'message': 'Task added successfully'})

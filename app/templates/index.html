@@ -8,10 +8,7 @@
     <link rel="stylesheet" href="static/css/mainpagestyle.css">
     <title>Homepage</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/css/layui.css"/>
-    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/layui.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../static/js/scripts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <!-- Navbar part -->
@@ -32,7 +29,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/index">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
@@ -49,18 +46,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                     </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
-                </li>
-                {% if not session.username %}
+                    {% else %}
                     <li class="nav-item nav_login">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
-                {% endif %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -144,8 +134,8 @@
         window.location.href = url;
     }
 
-    // Back to top
     $(document).ready(function () {
+        // Back to top
         $(window).scroll(function () {
             if ($(this).scrollTop() > 100) {
                 $('#back-to-top').fadeIn();
@@ -162,6 +152,38 @@
         $('#sort').on('change', function () {
             $('#sortOrder').val($(this).val());
             $('#searchForm').submit();
+        });
+
+        $(".upload_button").click(function () {
+            $.ajax({
+                url: './upload.html?type=1',
+                method: 'GET',
+                success: function (data) {
+                    if (data.code === 200 || !data.code) {
+                        let modalHtml = `
+                            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="uploadModalLabel">Submit Your Task</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="./upload.html?type=1" width="100%" height="600px" style="border:none;"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        $('body').append(modalHtml);
+                        $('#uploadModal').modal('show');
+                    } else {
+                        alert('Please log in first');
+                    }
+                },
+                error: function () {
+                    alert('Please log in first.');
+                }
+            });
         });
     });
 </script>

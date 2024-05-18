@@ -4,13 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="../static/css/style.css">
-    <title>Leaderboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/css/layui.css"/>
-    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/layui.min.js" type="text/javascript"
-            charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -23,7 +20,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
-             aria-labelledby="offcanvasDarkNavbarLabel">
+            aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
@@ -32,7 +29,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/index">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
@@ -81,14 +78,11 @@
         </div>
     </div>
 </div>
-</html>
-
 <script>
     $(function () {
-
         $("#login_btn").click(function () {
-            var username = $('#username').val()
-            var password = $('#password').val()
+            var username = $('#username').val();
+            var password = $('#password').val();
             $.ajax({
                 url: 'http://127.0.0.1:5000/login',
                 type: 'POST',
@@ -98,39 +92,22 @@
                     'password': password
                 }),
                 success: function (data) {
-
                     if (data.code == 400) {
-
-                        let layer = layui.layer
-                        layer.msg(data.message, {
-                            icon: 2,
-                            time: 2000
-                        
-                        })
+                        alert(data.message);
                     } else {
-                        layer.msg('Login Successful!', {icon: 1, time: 800})
-
+                        alert('Login Successful!');
                         setTimeout(() => {
-                            window.location.href = '../'
-
-                        }, 800)
-
-                        return;
+                            window.location.href = '../';
+                        }, 800);
                     }
                 },
                 error: (e) => {
-                    alert(JSON.stringify(e))
+                    alert(JSON.stringify(e));
                 }
-            })
-        })
-
-        $(".forgot_btn").click(function () {
-            layer.open({
-                type: 2,
-                title: 'Login',
-                content: './password.html?type=1',
-                area: ['1000px', '760px'],
             });
-        })
-    })
+        });
+    });
 </script>
+</body>
+</html>
+

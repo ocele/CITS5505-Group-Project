@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//unpkg.com/layui@2.9.9/dist/css/layui.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/profile.css">
-    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//unpkg.com/layui@2.9.9/dist/layui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="p-3 m-0 border-0 bd-example custom-background mt-5">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -28,7 +27,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/index">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/leaderboard.html">Leaderboard</a>
@@ -136,20 +135,20 @@
     <hr>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function requestajx() {
-        let form = new FormData()
-        let password = $('#password').val()
-        let file = document.querySelector('input[type="file"]').files[0]
-        if (password == '' && file == undefined) {
-            return layer.msg('Please Enter', {icon: 2, time: 100})
+        let form = new FormData();
+        let password = $('#password').val();
+        let file = document.querySelector('input[type="file"]').files[0];
+        if (password === '' && file === undefined) {
+            alert('Please Enter');
+            return;
         }
-        if (file != undefined) {
-            form.append('file', file)
+        if (file !== undefined) {
+            form.append('file', file);
         }
-        if (password != '') {
-            form.append('password', password)
+        if (password !== '') {
+            form.append('password', password);
         }
         console.log(form);
         $.ajax({
@@ -159,18 +158,18 @@
             processData: false,
             contentType: false,
             success: (res) => {
-                if (res.code == 200) {
-                    layer.msg('Change Saved', {icon: 1, time: 1000})
+                if (res.code === 200) {
+                    alert('Change Saved');
                     setTimeout(() => {
-                        window.location.reload()
+                        window.location.reload();
                     }, 1000);
                     return;
                 }
             },
             error: (e) => {
-                layer.alert(JSON.stringify(e), {icon: 2})
+                alert('Error: ' + JSON.stringify(e));
             }
-        })
+        });
     }
 </script>
 </body>
