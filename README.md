@@ -37,3 +37,10 @@ Below is a detailed description of the test file:
 	- test_1_register: Test the user registration function.
 	- test_2_login: Test the user login function.
 	- test_3_navigate_links: Test navigation links.
+ 
+## Run cleanup.py if you wish to clean all the testusedata 
+
+ You can use the following command to execute You can use the following command to execute the test file:
+    ```bash
+   python3 test/cleanup.py
+   ```
