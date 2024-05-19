@@ -1,11 +1,9 @@
-/* Reset some default browser styles */
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, blockquote, figure, figcaption, pre, table, th, td, form, fieldset, legend {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Set the font for the body */
 body {
   font-family: 'Roboto', sans-serif;
   line-height: 1.6;
@@ -14,8 +12,6 @@ body {
   padding: 20px;
 }
 
-
-/* Style the container */
 .layui-container {
   max-width: 800px;
   margin: 0 auto;
@@ -25,14 +21,12 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Style the article title */
 .article h1 {
   font-size: 2em;
   margin-bottom: 20px;
   color: #444;
 }
 
-/* Style the article info */
 .article-info {
   display: flex;
   align-items: center;
@@ -52,14 +46,12 @@ body {
   margin-right: 10px;
 }
 
-/* Style the article content */
 .article p {
   font-size: 1.1em;
   line-height: 1.8;
   margin-bottom: 20px;
 }
 
-/* Style the comment section */
 .comment {
   margin-top: 40px;
 }
@@ -92,7 +84,6 @@ body {
   flex: 1;
 }
 
-/* Style the comment form */
 .layui-form-text textarea {
   width: 100%;
   padding: 10px;
@@ -116,3 +107,13 @@ body {
   background-color: #00796b;
 }
 
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
