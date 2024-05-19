@@ -27,8 +27,8 @@
                     <label for="sortSelect" class="form-label">Sort by:</label>
                 </div>
                 <select class="form-select" id="sort" aria-label="Task Sort" style="width: auto;">
-                    <option value="date-newest">Latest Uploads</option>
-                    <option value="date-oldest">Oldest Uploads</option>
+                    <option value="date-newest" {% if  sort_order == 'date-newest' %}selected{% endif %}>LatestUploads</option>
+                    <option value="date-oldest" {% if  sort_order == 'date-oldest' %}selected{% endif %}>Oldest Uploads</option>
                 </select>
             </div>
         </div>
