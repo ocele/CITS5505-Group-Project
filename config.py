@@ -1,6 +1,6 @@
 class Config:
     SECRET_KEY = 'ylTIJL_jvzCHlSeKj5dH_MXj'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///yourdatabase.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///questhub.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(Config):
