@@ -121,7 +121,7 @@ def search():
         for task in tasks
     ]
 
-    return render_template('index.html', tasks=results, word=keyword，sort_order=sort_order)
+    return render_template('index.html', tasks=results, word=keyword, sort_order=sort_order)
 
 
 def get_articles_with_comments_from_user(user_id):
